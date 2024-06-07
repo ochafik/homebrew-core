@@ -36,7 +36,7 @@ class LlamaCpp < Formula
       -DLLAMA_CCACHE=OFF
       -DLLAMA_ALL_WARNINGS=OFF
       -DLLAMA_NATIVE=#{build.bottle? ? "OFF" : "ON"}
-      -DLLAMA_ACCELLERATE=#{OS.mac? ? "ON" : "OFF"}
+      -DLLAMA_ACCELERATE=#{OS.mac? ? "ON" : "OFF"}
       -DLLAMA_BLAS=#{OS.linux? ? "ON" : "OFF"}
       -DLLAMA_BLAS_VENDOR=OpenBLAS
       -DLLAMA_METAL=#{OS.mac? ? "ON" : "OFF"}
@@ -51,17 +51,6 @@ class LlamaCpp < Formula
     system "cmake", "--install", "build"
 
     libexec.install bin.children
-    libexec.children.each do |file|
-      next unless file.executable?
-
-      new_name = if file.basename.to_s == "main"
-        "llama"
-      else
-        "llama-#{file.basename}"
-      end
-
-      bin.install_symlink file => new_name
-    end
   end
 
   test do
